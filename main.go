@@ -1,7 +1,6 @@
 package main
 
 import (
-	database "TaxiServiceBackend/connection"
 	"TaxiServiceBackend/routes"
 
 	"github.com/gin-gonic/gin"
@@ -17,9 +16,6 @@ func main() {
 
 	//User Routes
 	routes.UserRoutes((router))
-
-	//db connection
-	database.Connection()
 
 	//Run gin Server
 	router.Run(":" + configPort)
