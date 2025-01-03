@@ -8,21 +8,32 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func Connection() {
+var DB *sql.DB = Connection()
+
+func Connection() *sql.DB {
 	// DSN with no password and root as the default username
 	dsn := "root:@tcp(127.0.0.1:3306)/db_taxi"
 
 	// Open the database connection
-	db, err := sql.Open("mysql", dsn)
+	database, err := sql.Open("mysql", dsn)
 	if err != nil {
 		log.Fatalf("Error opening database: %v", err)
 	}
-	defer db.Close()
+	//defer database.Close()
 
 	// Test the connection
-	if err := db.Ping(); err != nil {
+	if err := database.Ping(); err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
-	fmt.Println("Connected to MySQL database!")
+	_, connectionBeginError := database.Begin()
+
+	if connectionBeginError != nil {
+		fmt.Println("connecting begin error : %v", connectionBeginError)
+	}
+	result, _ := database.Exec("SELECT * FROM TEST")
+
+	fmt.Println("Connected to MySQL database!", result)
+
+	return database
 }
